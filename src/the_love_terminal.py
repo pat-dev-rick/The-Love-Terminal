@@ -89,6 +89,14 @@ def key_pressed(event):
             zeige_frage()
         else:
             zeige_ergebnis()
+        return
+
+    if seite == "restart" and key == "return":
+        aktuelle_frage = 0
+        punktzahl = 0
+        seite = "quiz"
+        zeige_frage()
+        return
 
 def zeige_start():
     global seite
@@ -136,22 +144,29 @@ def zeige_frage():
     option3_label.config(text=quiz[aktuelle_frage]["optionen"][2], font=("Courier", 22))
 
 def zeige_ergebnis():
-    global seite
+    global seite, aktuelle_frage, punktzahl
     seite = "ende"
     if punktzahl == len(quiz):
         servo.max()
         text = "🎉 Alle Antworten richtig!\nDas Kästchen der Liebe öffnet sich! 💖"
+        frage_label.config(
+            text=text,
+            font=("Courier", 28, "bold")
+        )
+        option1_label.config(text="Drücke Q, um zu beenden.", font=("Courier", 20))
+        option2_label.config(text="")
+        option3_label.config(text="")
     else:
         servo.min()
-        text = f"Quiz beendet.\nDu hast {punktzahl}/{len(quiz)} richtig.\nDas Kästchen bleibt verschlossen. 💔"
-
-    frage_label.config(
-        text=text,
-        font=("Courier", 28, "bold")
-    )
-    option1_label.config(text="Drücke Q, um zu beenden.", font=("Courier", 20))
-    option2_label.config(text="")
-    option3_label.config(text="")
+        text = f"Quiz beendet.\nDu hast {punktzahl}/{len(quiz)} richtig.\nDas Kästchen bleibt verschlossen. 💔\n\nDrücke ENTER, um es erneut zu versuchen."
+        frage_label.config(
+            text=text,
+            font=("Courier", 28, "bold")
+        )
+        option1_label.config(text="", font=("Courier", 20))
+        option2_label.config(text="")
+        option3_label.config(text="")
+        seite = "restart"
 
 # =========================
 # GUI Setup
