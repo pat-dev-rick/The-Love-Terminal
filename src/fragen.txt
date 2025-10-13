@@ -1,0 +1,17 @@
+Frage: Welche Programmiersprache ist typisch für den Raspberry Pi?
+1) Python
+2) C#
+3) Java
+Antwort: 1
+
+Frage: Wie viele GPIO-Pins hat der Raspberry Pi Zero W?
+1) 26
+2) 40
+3) 32
+Antwort: 2
+
+Frage: Was bedeutet 'GPIO'?
+1) General Purpose Input/Output
+2) Graphical Port Interface
+3) General Processor IO
+Antwort: 1
