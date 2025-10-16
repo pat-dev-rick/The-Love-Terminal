@@ -1,20 +1,8 @@
-Frage: Welche Programmiersprache ist typisch für den Raspberry Pi?
-1) Python
-2) C#
-3) Java
-Antwort: 1
-
 Frage: Wie viele GPIO-Pins hat der Raspberry Pi Zero W?
 1) 26
 2) 40
 3) 32
 Antwort: 2
-
-Frage: Was bedeutet 'GPIO'?
-1) General Purpose Input/Output
-2) Graphical Port Interface
-3) General Processor IO
-Antwort: 1
 
 Frage: @Lena Wie viele Bits hat ein Byte
 1) 4
@@ -33,3 +21,23 @@ Frage: @Tobi Wie groß ist ein Tennisspielfeld?
 2) 17,32x17,32m
 3) 23,77x10,97m
 Antwort: 3
+
+Frage: Bei wie viel °C sollten Jeans maximal gewaschen werden?
+1) 60 °C
+2) 40 °C
+3) 30 °C
+Antwort: 2
+
+Was ist der höchste Datendurchsatz einer Glasfaser?
+1) 10 Gbits/s
+2) > 1 Exabits/s
+3) 25 Tbits/s
+Antwort: 2
+
+Für was kann man einen Homeserver einsetzen?
+1) Reperatur vom Fahrrad
+2) Zubereiten leckerer Pizza
+3) Es gibt nicht einen Punkt. Ein homeserver macht das Leben insgesammt besser :)
+Antwort: 3
+
+
