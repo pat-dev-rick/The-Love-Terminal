@@ -28,16 +28,26 @@ Frage: Bei wie viel °C sollten Jeans maximal gewaschen werden?
 3) 30 °C
 Antwort: 2
 
-Was ist der höchste Datendurchsatz einer Glasfaser?
+Frage: Was ist der höchste Datendurchsatz einer Glasfaser?
 1) 10 Gbits/s
 2) > 1 Exabits/s
 3) 25 Tbits/s
 Antwort: 2
 
-Für was kann man einen Homeserver einsetzen?
+Frage: Für was kann man einen Homeserver einsetzen?
 1) Reperatur vom Fahrrad
 2) Zubereiten leckerer Pizza
 3) Es gibt nicht einen Punkt. Ein homeserver macht das Leben insgesammt besser :)
 Antwort: 3
 
+Frage: Maximalgeschwindigkeit des Zeppelin NT?
+1) 125 km/h
+2) 75 km/h
+3) 60 km/h
+Antwort: 1
 
+Frage: Welche Aussage triff auf das tasmanische Rotnackenwallab zu?
+1) Es ist schwarz weiß gestreift
+2) Es kann zwei Arten Muttermilch gleichzeitig produzieren
+3) Es kann von alles Kängurus am höchsten springen
+Antwort: 2
