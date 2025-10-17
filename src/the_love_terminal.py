@@ -105,13 +105,13 @@ def zeige_start():
         text="╔════════════════════════════╗\n"
              "     THE LOVE TERMINAL ❤️     \n"
              "╚════════════════════════════╝",
-        font=("Courier", 36, "bold")
+        font=header_font
     )
     option1_label.config(
         text="\nWillkommen zum Hochzeitsspiel!\n"
              "Teste dein Wissen und öffne das Kästchen der Liebe.\n\n"
              "Drücke ENTER, um fortzufahren.",
-        font=("Courier", 20)
+        font=option_font
     )
     option2_label.config(text="")
     option3_label.config(text="")
@@ -121,7 +121,7 @@ def zeige_regeln():
     seite = "regeln"
     frage_label.config(
         text="SPIELREGELN 💚",
-        font=("Courier", 32, "bold")
+        font=header_font
     )
     option1_label.config(
         text="• Beantworte jede Frage mit 1, 2 oder 3.\n"
@@ -129,7 +129,7 @@ def zeige_regeln():
              "• Nach der letzten Frage öffnet sich das Kästchen –\n"
              "  aber nur, wenn du alle Antworten richtig hast!\n\n"
              "Drücke ENTER, um zu beginnen.",
-        font=("Courier", 20)
+        font=option_font
     )
     option2_label.config(text="")
     option3_label.config(text="")
@@ -137,11 +137,11 @@ def zeige_regeln():
 def zeige_frage():
     frage_label.config(
         text=quiz[aktuelle_frage]["frage"],
-        font=("Courier", 28, "bold")
+        font=question_font
     )
-    option1_label.config(text=quiz[aktuelle_frage]["optionen"][0], font=("Courier", 22))
-    option2_label.config(text=quiz[aktuelle_frage]["optionen"][1], font=("Courier", 22))
-    option3_label.config(text=quiz[aktuelle_frage]["optionen"][2], font=("Courier", 22))
+    option1_label.config(text=quiz[aktuelle_frage]["optionen"][0], font=option_font)
+    option2_label.config(text=quiz[aktuelle_frage]["optionen"][1], font=option_font)
+    option3_label.config(text=quiz[aktuelle_frage]["optionen"][2], font=option_font)
 
 def zeige_ergebnis():
     global seite, aktuelle_frage, punktzahl
@@ -151,9 +151,9 @@ def zeige_ergebnis():
         text = "🎉 Alle Antworten richtig!\nDas Kästchen der Liebe öffnet sich! 💖"
         frage_label.config(
             text=text,
-            font=("Courier", 28, "bold")
+            font=question_font
         )
-        option1_label.config(text="Drücke Q, um zu beenden.", font=("Courier", 20))
+        option1_label.config(text="Drücke Q, um zu beenden.", font=option_font)
         option2_label.config(text="")
         option3_label.config(text="")
     else:
@@ -161,9 +161,9 @@ def zeige_ergebnis():
         text = f"Quiz beendet.\nDu hast {punktzahl}/{len(quiz)} richtig.\nDas Kästchen bleibt verschlossen. 💔\n\nDrücke ENTER, um es erneut zu versuchen."
         frage_label.config(
             text=text,
-            font=("Courier", 28, "bold")
+            font=question_font
         )
-        option1_label.config(text="", font=("Courier", 20))
+        option1_label.config(text="", font=option_font)
         option2_label.config(text="")
         option3_label.config(text="")
         seite = "restart"
@@ -173,7 +173,21 @@ def zeige_ergebnis():
 # =========================
 root = tk.Tk()
 root.title("The Love Terminal")
-root.attributes("-fullscreen", True)
+
+# Bildschirmmaße abfragen und an kleine Displays anpassen
+root.update_idletasks()
+screen_w = root.winfo_screenwidth()
+screen_h = root.winfo_screenheight()
+
+# Zielauflösung für den kleinen Monitor
+target_w, target_h = (640, 480)
+
+# Wenn Display klein ist, Nutze feste Fenstergröße; sonst Vollbild
+if screen_w <= target_w or screen_h <= target_h:
+    root.geometry(f"{target_w}x{target_h}")
+else:
+    root.attributes("-fullscreen", True)
+
 root.focus_force()
 root.configure(bg="black")
 root.config(cursor="none")
@@ -181,18 +195,34 @@ root.config(cursor="none")
 text_color = "#00FF00"
 bg_color = "black"
 
-frage_label = tk.Label(root, text="", wraplength=root.winfo_screenwidth()-100,
+# Schriftgrößen und Abstände skalieren je nach Bildschirmgröße
+if screen_w <= 800 or screen_h <= 600:
+    header_font = ("Courier", 18, "bold")
+    question_font = ("Courier", 16, "bold")
+    option_font = ("Courier", 12)
+    top_pad = 20
+    small_pad = 6
+    wrap_px = target_w - 40
+else:
+    header_font = ("Courier", 36, "bold")
+    question_font = ("Courier", 28, "bold")
+    option_font = ("Courier", 22)
+    top_pad = 100
+    small_pad = 10
+    wrap_px = screen_w - 100
+
+frage_label = tk.Label(root, text="", wraplength=wrap_px,
                        justify="center", fg=text_color, bg=bg_color)
-frage_label.pack(pady=100)
+frage_label.pack(pady=top_pad, padx=20, fill="x")
 
 option1_label = tk.Label(root, text="", fg=text_color, bg=bg_color)
-option1_label.pack(pady=10)
+option1_label.pack(pady=small_pad, padx=20, fill="x")
 
 option2_label = tk.Label(root, text="", fg=text_color, bg=bg_color)
-option2_label.pack(pady=10)
+option2_label.pack(pady=small_pad, padx=20, fill="x")
 
 option3_label = tk.Label(root, text="", fg=text_color, bg=bg_color)
-option3_label.pack(pady=10)
+option3_label.pack(pady=small_pad, padx=20, fill="x")
 
 root.bind("<Key>", key_pressed)
 
