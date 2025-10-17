@@ -222,8 +222,8 @@ question_font = ("Courier", question_size, "bold")
 option_font = ("Courier", option_size)
 
 # Feste, sehr kleine Start-Fonts (werden immer für die Startseite verwendet)
-start_header_font = ("Courier", 10, "bold")
-start_option_font = ("Courier", 8)
+start_header_font = ("Courier", 14, "bold")  # vorher 10 — jetzt größer
+start_option_font = ("Courier", 10)          # vorher 8  — jetzt größer
 
 # Berechne initial wraplength aus der aktuellen Fensterbreite mit Puffer,
 # damit links/rechts kein Zeichen abgeschnitten wird.
