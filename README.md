@@ -8,9 +8,13 @@ Vorneweg: bitte etwas Geduld — die Hardware ist nicht sehr schnell und der Bil
 1. Das Love‑Terminal mit Strom versorgen.
 2. Kurz warten — das Booten kann einige Zeit dauern und gelegentliches Flackern am Bildschirm ist normal.
 3. Bluetooth‑Tastatur verbinden:
+
    3.1 Schalte die Tastatur aus (OFF), dann wieder ein (ON) — der Einschaltknopf befindet sich oben rechts.  
+  
 4. Das Quiz starten:
+   
    4.1 Doppelklick auf das Desktop‑Icon.
+   
    4.2 Nach jeder Frage kurz warten. Die LED zeigt an, ob die Antwort richtig oder falsch war.
 
 ## Tipps & Fehlerbehebung
