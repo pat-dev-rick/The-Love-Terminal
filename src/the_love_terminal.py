@@ -102,13 +102,20 @@ def key_pressed(event):
 def zeige_start():
     global seite
     seite = "start"
-    # kleinere Header-Schrift nur für die Startseite berechnen
+    # noch kleinerer Start-Header
     try:
         base_size = header_font[1]
     except Exception:
         base_size = header_size
-    start_size = max(10, base_size - 10)  # ggf. anpassen
+    start_size = max(8, base_size - 14)  # deutlich kleiner als vorher
     start_header_font = ("Courier", start_size, "bold")
+
+    # kleinere Option-Schrift für Startseite
+    try:
+        opt_base = option_font[1]
+    except Exception:
+        opt_base = option_size
+    start_option_font = ("Courier", max(8, opt_base - 2))
 
     frage_label.config(
         text="╔════════════════════════════╗\n"
@@ -120,7 +127,7 @@ def zeige_start():
         text="\nWillkommen zum Hochzeitsspiel!\n"
              "Teste dein Wissen und öffne das Kästchen der Liebe.\n\n"
              "Drücke ENTER, um fortzufahren.",
-        font=option_font
+        font=start_option_font
     )
     option2_label.config(text="")
     option3_label.config(text="")
