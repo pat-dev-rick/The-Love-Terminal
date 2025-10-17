@@ -214,33 +214,36 @@ else:
 
 # Berechne initial wraplength aus der aktuellen Fensterbreite mit Puffer,
 # damit links/rechts kein Zeichen abgeschnitten wird.
+PAD_X = 12        # Label padx
+SAFETY_MARGIN = 20  # extra Puffer in Pixeln, erhöht damit kein Buchstabe abgeschnitten wird
+
 initial_width = max(200, root.winfo_width() or target_w)
-wrap_px = max(100, initial_width - 48)
+wrap_px = max(100, initial_width - PAD_X * 2 - SAFETY_MARGIN)
 
 # Labels mit Wraplength auch für Optionen
 frage_label = tk.Label(root, text="", wraplength=wrap_px,
                        justify="center", fg=text_color, bg=bg_color)
-frage_label.pack(pady=top_pad, padx=24, fill="x")
+frage_label.pack(pady=top_pad, padx=PAD_X, fill="x")
 
 option1_label = tk.Label(root, text="", wraplength=wrap_px,
                          justify="center", fg=text_color, bg=bg_color)
-option1_label.pack(pady=small_pad, padx=24, fill="x")
+option1_label.pack(pady=small_pad, padx=PAD_X, fill="x")
 
 option2_label = tk.Label(root, text="", wraplength=wrap_px,
                          justify="center", fg=text_color, bg=bg_color)
-option2_label.pack(pady=small_pad, padx=24, fill="x")
+option2_label.pack(pady=small_pad, padx=PAD_X, fill="x")
 
 option3_label = tk.Label(root, text="", wraplength=wrap_px,
                          justify="center", fg=text_color, bg=bg_color)
-option3_label.pack(pady=small_pad, padx=24, fill="x")
+option3_label.pack(pady=small_pad, padx=PAD_X, fill="x")
 
 root.bind("<Key>", key_pressed)
 
 # Resize-Handler: aktualisiert wraplength + Fonts, verhindert Abschneiden an den Seiten
 def on_resize(event):
     global wrap_px
-    # event.width ist die innere Breite des Fensters; kleiner Puffer zum Rand
-    wrap_px = max(80, event.width - 48)
+    # event.width ist die innere Breite des Fensters; großzügiger Puffer zum Rand
+    wrap_px = max(80, event.width - PAD_X * 2 - SAFETY_MARGIN)
     for lbl in (frage_label, option1_label, option2_label, option3_label):
         lbl.config(wraplength=wrap_px)
     # Fonts an neue Breite/Höhe anpassen
