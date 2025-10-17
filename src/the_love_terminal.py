@@ -2,6 +2,7 @@ import tkinter as tk
 from gpiozero import LED, DigitalOutputDevice, Servo
 from gpiozero.pins.pigpio import PiGPIOFactory
 from time import sleep
+import tkinter.font as tkfont
 
 # =========================
 # Hardware Setup
@@ -185,6 +186,7 @@ target_w, target_h = (640, 480)
 # Wenn Display klein ist, Nutze feste Fenstergröße; sonst Vollbild
 if screen_w <= target_w or screen_h <= target_h:
     root.geometry(f"{target_w}x{target_h}")
+    root.resizable(False, False)
 else:
     root.attributes("-fullscreen", True)
 
@@ -195,36 +197,116 @@ root.config(cursor="none")
 text_color = "#00FF00"
 bg_color = "black"
 
-# Schriftgrößen und Abstände skalieren je nach Bildschirmgröße
+# Basis-Schriftgrößen (werden ggf. dynamisch verkleinert)
 if screen_w <= 800 or screen_h <= 600:
-    header_font = ("Courier", 18, "bold")
-    question_font = ("Courier", 16, "bold")
-    option_font = ("Courier", 12)
-    top_pad = 20
-    small_pad = 6
+    header_size = 18
+    question_size = 16
+    option_size = 12
+    top_pad = 12
+    small_pad = 4
     wrap_px = target_w - 40
 else:
-    header_font = ("Courier", 36, "bold")
-    question_font = ("Courier", 28, "bold")
-    option_font = ("Courier", 22)
-    top_pad = 100
-    small_pad = 10
+    header_size = 36
+    question_size = 28
+    option_size = 22
+    top_pad = 60
+    small_pad = 8
     wrap_px = screen_w - 100
 
+# Labels mit Wraplength auch für Optionen
 frage_label = tk.Label(root, text="", wraplength=wrap_px,
                        justify="center", fg=text_color, bg=bg_color)
-frage_label.pack(pady=top_pad, padx=20, fill="x")
+frage_label.pack(pady=top_pad, padx=12, fill="x")
 
-option1_label = tk.Label(root, text="", fg=text_color, bg=bg_color)
-option1_label.pack(pady=small_pad, padx=20, fill="x")
+option1_label = tk.Label(root, text="", wraplength=wrap_px,
+                         justify="center", fg=text_color, bg=bg_color)
+option1_label.pack(pady=small_pad, padx=12, fill="x")
 
-option2_label = tk.Label(root, text="", fg=text_color, bg=bg_color)
-option2_label.pack(pady=small_pad, padx=20, fill="x")
+option2_label = tk.Label(root, text="", wraplength=wrap_px,
+                         justify="center", fg=text_color, bg=bg_color)
+option2_label.pack(pady=small_pad, padx=12, fill="x")
 
-option3_label = tk.Label(root, text="", fg=text_color, bg=bg_color)
-option3_label.pack(pady=small_pad, padx=20, fill="x")
+option3_label = tk.Label(root, text="", wraplength=wrap_px,
+                         justify="center", fg=text_color, bg=bg_color)
+option3_label.pack(pady=small_pad, padx=12, fill="x")
 
 root.bind("<Key>", key_pressed)
 
+# Funktion: Schriftgrößen dynamisch an Inhalt & Bildschirmhöhe anpassen
+def adjust_fonts():
+    global header_font, question_font, option_font
+    # Startwerte
+    h = header_size
+    q = question_size
+    o = option_size
+    # Minimalgrößen
+    h_min, q_min, o_min = 12, 10, 8
+
+    def total_text_height(hs, qs, os):
+        fh = tkfont.Font(family="Courier", size=hs, weight="bold")
+        fq = tkfont.Font(family="Courier", size=qs, weight="bold")
+        fo = tkfont.Font(family="Courier", size=os)
+
+        # Hilfsfunktion: Zeilenanzahl nach wrap berechnen
+        def lines_needed(font_obj, text):
+            if not text:
+                return 0
+            # pixels pro Zeile / wrap_px ergibt Zeilenanzahl
+            # fall-back: mindestens 1
+            line_width = wrap_px
+            # schneide bei leeren texts
+            words = text.split()
+            if not words:
+                return 1
+            lines = 0
+            cur = ""
+            for w in words:
+                test = (cur + " " + w).strip()
+                if font_obj.measure(test) <= line_width:
+                    cur = test
+                else:
+                    lines += 1
+                    cur = w
+            if cur:
+                lines += 1
+            return lines
+
+        h_lines = lines_needed(fh, frage_label.cget("text"))
+        o1_lines = lines_needed(fo, option1_label.cget("text"))
+        o2_lines = lines_needed(fo, option2_label.cget("text"))
+        o3_lines = lines_needed(fo, option3_label.cget("text"))
+
+        # Gesamtpixelhöhe = Zeilen * linespace + paddings
+        total = (h_lines * fh.metrics("linespace")
+                 + (o1_lines + o2_lines + o3_lines) * fo.metrics("linespace"))
+        # add paddings + some margin
+        total += top_pad + 3 * small_pad + 60
+        return total
+
+    # Verkürze solange, bis alles passt oder Minimalgrößen erreicht sind
+    while (h > h_min or q > q_min or o > o_min) and total_text_height(h, q, o) > screen_h - 20:
+        # Reduziere moderat: größere Schritte für größere Schriften
+        if h > h_min:
+            h -= 2
+        if q > q_min:
+            q -= 1
+        if o > o_min:
+            o -= 1
+
+    # Setze Fonts
+    header_font = ("Courier", h, "bold")
+    question_font = ("Courier", q, "bold")
+    option_font = ("Courier", o)
+
+# Vor dem ersten Anzeigen Fonts anpassen (nutzt initiale Texte)
+# Leere Texte setzen, dann adjust -> die echten Texte setzen die Funktionen später
+frage_label.config(text="")
+option1_label.config(text="")
+option2_label.config(text="")
+option3_label.config(text="")
+
+adjust_fonts()
+
+# Jetzt die Startseite anzeigen (diese verwendet header_font / option_font)
 zeige_start()
 root.mainloop()
