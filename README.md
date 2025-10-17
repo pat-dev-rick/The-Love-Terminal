@@ -20,4 +20,4 @@ Vorneweg: bitte etwas Geduld — die Hardware ist nicht sehr schnell und der Bil
 ## Kontakt / Support
 Ihr habt den Sourcecode könnt es also selbt fixen. Merge-Request könnt ihr gerne stellen :)
 
-Wenns gar nicht geht maschen wir es einfach einmal zusammen
+Wenns gar nicht geht machen wir es einfach einmal zusammen
