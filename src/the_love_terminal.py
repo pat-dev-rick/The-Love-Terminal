@@ -102,11 +102,19 @@ def key_pressed(event):
 def zeige_start():
     global seite
     seite = "start"
+    # kleinere Header-Schrift nur für die Startseite berechnen
+    try:
+        base_size = header_font[1]
+    except Exception:
+        base_size = header_size
+    start_size = max(10, base_size - 10)  # ggf. anpassen
+    start_header_font = ("Courier", start_size, "bold")
+
     frage_label.config(
         text="╔════════════════════════════╗\n"
              "     THE LOVE TERMINAL ❤️     \n"
              "╚════════════════════════════╝",
-        font=header_font
+        font=start_header_font
     )
     option1_label.config(
         text="\nWillkommen zum Hochzeitsspiel!\n"
