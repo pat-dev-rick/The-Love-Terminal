@@ -286,10 +286,7 @@ def adjust_fonts():
         def lines_needed(font_obj, text):
             if not text:
                 return 0
-            # pixels pro Zeile / wrap_px ergibt Zeilenanzahl
-            # fall-back: mindestens 1
-            line_width = wrap_px
-            # schneide bei leeren texts
+            line_width = max(10, min(wrap_px, root.winfo_width() - PAD_X * 2))
             words = text.split()
             if not words:
                 return 1
@@ -318,11 +315,13 @@ def adjust_fonts():
         total += top_pad + 3 * small_pad + 60
         return total
 
+    # Verwende die aktuelle Fensterhöhe (nicht die ursprüngliche screen_h)
+    max_height = max(100, root.winfo_height() or screen_h)
+
     # Verkürze solange, bis alles passt oder Minimalgrößen erreicht sind
-    while (h > h_min or q > q_min or o > o_min) and total_text_height(h, q, o) > screen_h - 20:
-        # Reduziere moderat: größere Schritte für größere Schriften
+    while (h > h_min or q > q_min or o > o_min) and total_text_height(h, q, o) > max_height - 20:
         if h > h_min:
-            h -= 2
+            h -= 1
         if q > q_min:
             q -= 1
         if o > o_min:
@@ -333,15 +332,39 @@ def adjust_fonts():
     question_font = ("Courier", q, "bold")
     option_font = ("Courier", o)
 
-# Vor dem ersten Anzeigen Fonts anpassen (nutzt initiale Texte)
-# Leere Texte setzen, dann adjust -> die echten Texte setzen die Funktionen später
-frage_label.config(text="")
-option1_label.config(text="")
-option2_label.config(text="")
-option3_label.config(text="")
+# Vor dem ersten Anzeigen: echte Starttexte setzen, dann anpassen
+# (so berechnet adjust_fonts() auf realen Texten — nicht auf leeren Labels)
+zeige_start()
+root.update_idletasks()
 
+# Setze initiale wraplengths basierend auf den tatsächlichen Label-Breiten,
+# mit kleinem Puffer, so dass kein Buchstabe abgeschnitten wird.
+for lbl in (frage_label, option1_label, option2_label, option3_label):
+    w = lbl.winfo_width() or root.winfo_width()
+    lbl.config(wraplength=max(10, w - 8))
+
+# Kleine Debounce-Logik: beim Resize nicht sofort fonts zerstören
+resize_after_id = None
+def on_resize_debounced(event):
+    global resize_after_id
+    # Stelle wraplength jeweils an label-breite ein (vermeidet off-by-one)
+    for lbl in (frage_label, option1_label, option2_label, option3_label):
+        w = lbl.winfo_width() or event.width or root.winfo_width()
+        lbl.config(wraplength=max(10, w - 8))
+    # debounce adjust_fonts
+    if resize_after_id:
+        root.after_cancel(resize_after_id)
+    resize_after_id = root.after(150, lambda: (adjust_fonts(), 
+                                               frage_label.config(font=header_font if seite in ("start","regeln") else question_font),
+                                               option1_label.config(font=option_font),
+                                               option2_label.config(font=option_font),
+                                               option3_label.config(font=option_font)))
+
+# Überschreibe alte Bindung auf Configure
+root.unbind("<Configure>")
+root.bind("<Configure>", on_resize_debounced)
+
+# Jetzt echte Fonts anpassen und Fenster starten
 adjust_fonts()
-
-# Jetzt die Startseite anzeigen (diese verwendet header_font / option_font)
 zeige_start()
 root.mainloop()
