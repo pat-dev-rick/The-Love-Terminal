@@ -69,3 +69,9 @@ Frage: Was passiert, wenn man in Japan an einer Ampel wartet und niemand die Str
 2) Man wartet… sehr lange
 3) Die Ampel springt auf Rot
 Antwort: 2
+
+Frage: Was ist das bekannteste Hochgeschwindigkeitszug-System in Japan?
+1) Shinkansen
+2) Bullet Express
+3) Fast Train X
+Antwort: 1
