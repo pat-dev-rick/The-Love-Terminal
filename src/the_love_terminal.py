@@ -190,6 +190,7 @@ if screen_w <= target_w or screen_h <= target_h:
 else:
     root.attributes("-fullscreen", True)
 
+root.update_idletasks()  # aktuelle Fenstergröße wissen
 root.focus_force()
 root.configure(bg="black")
 root.config(cursor="none")
@@ -204,33 +205,64 @@ if screen_w <= 800 or screen_h <= 600:
     option_size = 12
     top_pad = 12
     small_pad = 4
-    wrap_px = target_w - 40
 else:
     header_size = 36
     question_size = 28
     option_size = 22
     top_pad = 60
     small_pad = 8
-    wrap_px = screen_w - 100
+
+# Berechne initial wraplength aus der aktuellen Fensterbreite mit Puffer,
+# damit links/rechts kein Zeichen abgeschnitten wird.
+initial_width = max(200, root.winfo_width() or target_w)
+wrap_px = max(100, initial_width - 48)
 
 # Labels mit Wraplength auch für Optionen
 frage_label = tk.Label(root, text="", wraplength=wrap_px,
                        justify="center", fg=text_color, bg=bg_color)
-frage_label.pack(pady=top_pad, padx=12, fill="x")
+frage_label.pack(pady=top_pad, padx=24, fill="x")
 
 option1_label = tk.Label(root, text="", wraplength=wrap_px,
                          justify="center", fg=text_color, bg=bg_color)
-option1_label.pack(pady=small_pad, padx=12, fill="x")
+option1_label.pack(pady=small_pad, padx=24, fill="x")
 
 option2_label = tk.Label(root, text="", wraplength=wrap_px,
                          justify="center", fg=text_color, bg=bg_color)
-option2_label.pack(pady=small_pad, padx=12, fill="x")
+option2_label.pack(pady=small_pad, padx=24, fill="x")
 
 option3_label = tk.Label(root, text="", wraplength=wrap_px,
                          justify="center", fg=text_color, bg=bg_color)
-option3_label.pack(pady=small_pad, padx=12, fill="x")
+option3_label.pack(pady=small_pad, padx=24, fill="x")
 
 root.bind("<Key>", key_pressed)
+
+# Resize-Handler: aktualisiert wraplength + Fonts, verhindert Abschneiden an den Seiten
+def on_resize(event):
+    global wrap_px
+    # event.width ist die innere Breite des Fensters; kleiner Puffer zum Rand
+    wrap_px = max(80, event.width - 48)
+    for lbl in (frage_label, option1_label, option2_label, option3_label):
+        lbl.config(wraplength=wrap_px)
+    # Fonts an neue Breite/Höhe anpassen
+    try:
+        adjust_fonts()
+    except Exception:
+        pass
+    # aktuelle Seite neu mit passenden Fonts rendern
+    if seite in ("start", "regeln"):
+        frage_label.config(font=header_font)
+        option1_label.config(font=option_font)
+    elif seite == "quiz":
+        frage_label.config(font=question_font)
+        option1_label.config(font=option_font)
+        option2_label.config(font=option_font)
+        option3_label.config(font=option_font)
+    else:
+        frage_label.config(font=question_font)
+        option1_label.config(font=option_font)
+
+# Binde Configure (Fenstergröße ändert sich) — sorgt für korrekte wraplength-Berechnung
+root.bind("<Configure>", on_resize)
 
 # Funktion: Schriftgrößen dynamisch an Inhalt & Bildschirmhöhe anpassen
 def adjust_fonts():
