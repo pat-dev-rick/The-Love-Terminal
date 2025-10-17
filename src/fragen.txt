@@ -55,7 +55,7 @@ Antwort: 2
 Frage: Wie lang ist die Küste Australiens ungefähr?
 1) 15.000 km
 2) 25.000 km
-3)35.000 km
+3) 35.000 km
 Antwort: 2
 
 Frage: Wie viele Tennisbälle werden bei einem Grand Slam ungefähr pro Jahr benutzt?
