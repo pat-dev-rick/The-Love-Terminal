@@ -212,6 +212,11 @@ else:
     top_pad = 60
     small_pad = 8
 
+# --- Initiale Font-Variablen, damit zeige_start() sofort verwendet werden kann ---
+header_font = ("Courier", header_size, "bold")
+question_font = ("Courier", question_size, "bold")
+option_font = ("Courier", option_size)
+
 # Berechne initial wraplength aus der aktuellen Fensterbreite mit Puffer,
 # damit links/rechts kein Zeichen abgeschnitten wird.
 PAD_X = 12        # Label padx
