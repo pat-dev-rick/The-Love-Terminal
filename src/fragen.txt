@@ -64,3 +64,8 @@ Frage: Wie viele Tennisbälle werden bei einem Grand Slam ungefähr pro Jahr ben
 3) 300.000
 Antwort: 3
 
+Frage: Was passiert, wenn man in Japan an einer Ampel wartet und niemand die Straße überquert?
+1) Man bekommt Applaus
+2) Man wartet… sehr lange
+3) Die Ampel springt auf Rot
+Antwort: 2
